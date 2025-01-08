@@ -318,7 +318,6 @@ func (p *Paragraph) UnmarshalXML(d *xml.Decoder, _ xml.StartElement) error {
 					return err
 				}
 				p.Properties = &value
-				elem = &value
 			case "sdt":
 				var value SDT
 				err = d.DecodeElement(&value, &tt)

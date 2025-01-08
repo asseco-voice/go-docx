@@ -293,6 +293,8 @@ type Spacing struct {
 
 	BeforeLines int    `xml:"w:beforeLines,attr,omitempty"`
 	Before      int    `xml:"w:before,attr,omitempty"`
+	AfterLines  int    `xml:"w:afterLines,attr,omitempty"`
+	After       int    `xml:"w:after,attr,omitempty"`
 	Line        int    `xml:"w:line,attr,omitempty"`
 	LineRule    string `xml:"w:lineRule,attr,omitempty"`
 }
@@ -313,6 +315,16 @@ func (s *Spacing) UnmarshalXML(d *xml.Decoder, start xml.StartElement) (err erro
 			}
 		case "before":
 			s.Before, err = strconv.Atoi(attr.Value)
+			if err != nil {
+				return
+			}
+		case "after":
+			s.After, err = strconv.Atoi(attr.Value)
+			if err != nil {
+				return
+			}
+		case "afterLines":
+			s.AfterLines, err = strconv.Atoi(attr.Value)
 			if err != nil {
 				return
 			}

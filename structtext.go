@@ -242,6 +242,9 @@ func (p *Paragraph) MergeText(canmerge RunMergeRule) (np Paragraph) {
 				switch x := c.(type) {
 				case *Text:
 					if x.Text != "" {
+						if x.XMLSpace != "" && t.XMLSpace == "" {
+							t.XMLSpace = x.XMLSpace // Copy xml:space from the original Text else spaces are ignored
+						}
 						t.Text += x.Text
 					}
 				default:
@@ -264,6 +267,9 @@ func (p *Paragraph) MergeText(canmerge RunMergeRule) (np Paragraph) {
 					i := len(prevrun.Children) - 1
 					if t, ok := prevrun.Children[i].(*Text); ok {
 						prevtext = t
+						if t.XMLSpace != "" && prevtext.XMLSpace == "" {
+							prevtext.XMLSpace = t.XMLSpace
+						}
 						noappend = true
 					} else {
 						prevtext = &Text{}
@@ -273,6 +279,9 @@ func (p *Paragraph) MergeText(canmerge RunMergeRule) (np Paragraph) {
 					switch x := c.(type) {
 					case *Text:
 						if x.Text != "" {
+							if x.XMLSpace != "" && prevtext.XMLSpace == "" {
+								prevtext.XMLSpace = x.XMLSpace
+							}
 							prevtext.Text += x.Text
 						}
 					default:
