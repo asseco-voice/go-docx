@@ -3,6 +3,7 @@
    Copyright (c) 2021 Gonzalo Fernandez-Victorio
    Copyright (c) 2021 Basement Crowd Ltd (https://www.basementcrowd.com)
    Copyright (c) 2023 Fumiama Minamoto (源文雨)
+   Copyright (c) 2025 asseco-voice
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published
@@ -21,7 +22,9 @@
 package docx
 
 import (
+	"encoding/json"
 	"encoding/xml"
+	"fmt"
 	"io"
 	"reflect"
 	"strconv"
@@ -44,6 +47,7 @@ type ParagraphProperties struct {
 	Kinsoku        *Kinsoku
 	OverflowPunct  *OverflowPunct
 	NumProperties  *NumProperties
+	KeepNext       *KeepNext
 	RunProperties  *RunProperties
 }
 
@@ -114,6 +118,17 @@ func (p *ParagraphProperties) UnmarshalXML(d *xml.Decoder, _ xml.StartElement) e
 					return err
 				}
 				p.NumProperties = &value
+			case "keepNext":
+				var value KeepNext
+				v := getAtt(tt.Attr, "val")
+				if v == "" {
+					continue
+				}
+				value.Val, err = strconv.Atoi(v)
+				if err != nil {
+					return err
+				}
+				p.KeepNext = &value
 			case "pStyle":
 				p.Style = &Style{Val: getAtt(tt.Attr, "val")}
 			case "textAlignment":
@@ -303,7 +318,22 @@ func (p *Paragraph) UnmarshalXML(d *xml.Decoder, _ xml.StartElement) error {
 					return err
 				}
 				p.Properties = &value
-				continue
+				elem = &value
+			case "sdt":
+				var value SDT
+				err = d.DecodeElement(&value, &tt)
+				prettyJSON, err := json.MarshalIndent(tt, "", "  ")
+				if err != nil {
+					fmt.Println("Failed to generate JSON:", err)
+				}
+				fmt.Println(string(prettyJSON))
+				if err != nil {
+					println(err.Error())
+				}
+				if err != nil && !strings.HasPrefix(err.Error(), "expected") {
+					return err
+				}
+				elem = &value
 			default:
 				err = d.Skip() // skip unsupported tags
 				if err != nil {

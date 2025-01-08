@@ -3,6 +3,7 @@
    Copyright (c) 2021 Gonzalo Fernandez-Victorio
    Copyright (c) 2021 Basement Crowd Ltd (https://www.basementcrowd.com)
    Copyright (c) 2023 Fumiama Minamoto (源文雨)
+   Copyright (c) 2025 asseco-voice
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published
@@ -80,32 +81,32 @@ func unpack(zipReader *zip.Reader) (docx *Docx, err error) {
 	return
 }
 
-//func (f *Docx) parseNumbering(file *zip.File) error {
-//	zf, err := file.Open()
-//	if err != nil {
-//		return err
-//	}
-//	defer zf.Close()
-//
-//	f.Numbering.XMLW = XMLNS_W
-//	f.Numbering.XMLR = XMLNS_R
-//	f.Numbering.XMLWP = XMLNS_WP
-//	// f.Document.XMLMC = XMLNS_MC
-//	// f.Document.XMLO = XMLNS_O
-//	// f.Document.XMLV = XMLNS_V
-//	f.Numbering.XMLWPS = XMLNS_WPS
-//	f.Numbering.XMLWPC = XMLNS_WPC
-//	f.Numbering.XMLWPG = XMLNS_WPG
-//	// f.Document.XMLWP14 = XMLNS_WP14
-//	f.Numbering.XMLName.Space = XMLNS_W
-//	f.Numbering.XMLName.Local = "numbering"
-//
-//	f.Numbering.file = f
-//	//TODO: find last docID
-//	f.docID = 100000
-//	err = xml.NewDecoder(zf).Decode(&f.Document)
-//	return err
-//}
+func (f *Docx) parseNumbering(file *zip.File) error {
+	zf, err := file.Open()
+	if err != nil {
+		return err
+	}
+	defer zf.Close()
+
+	f.Numbering.XMLW = XMLNS_W
+	f.Numbering.XMLR = XMLNS_R
+	f.Numbering.XMLWP = XMLNS_WP
+	// f.Document.XMLMC = XMLNS_MC
+	// f.Document.XMLO = XMLNS_O
+	// f.Document.XMLV = XMLNS_V
+	f.Numbering.XMLWPS = XMLNS_WPS
+	f.Numbering.XMLWPC = XMLNS_WPC
+	f.Numbering.XMLWPG = XMLNS_WPG
+	// f.Document.XMLWP14 = XMLNS_WP14
+	f.Numbering.XMLName.Space = XMLNS_W
+	f.Numbering.XMLName.Local = "numbering"
+
+	f.Numbering.file = f
+	//TODO: find last docID
+	f.docID = 100000
+	err = xml.NewDecoder(zf).Decode(&f.Document)
+	return err
+}
 
 // parseDocument processes one of the relevant files, the one with the actual document
 func (f *Docx) parseDocument(file *zip.File) error {

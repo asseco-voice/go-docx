@@ -3,6 +3,7 @@ package docx
 import (
 	"encoding/xml"
 	"io"
+	"strconv"
 )
 
 // NumProperties <w:numPr>
@@ -25,6 +26,11 @@ type NumId struct {
 	Val     string   `xml:"w:val,attr"`
 }
 
+type KeepNext struct {
+	XMLName xml.Name `xml:"w:keepNext,omitempty"`
+	Val     int      `xml:"w:val,attr,omitempty"`
+}
+
 func (p *NumProperties) UnmarshalXML(d *xml.Decoder, _ xml.StartElement) error {
 	for {
 		t, err := d.Token()
@@ -42,6 +48,7 @@ func (p *NumProperties) UnmarshalXML(d *xml.Decoder, _ xml.StartElement) error {
 				if v == "" {
 					continue
 				}
+				value.Val = v
 				p.Ilvl = &value
 			case "numId":
 				var value NumId
@@ -49,6 +56,7 @@ func (p *NumProperties) UnmarshalXML(d *xml.Decoder, _ xml.StartElement) error {
 				if v == "" {
 					continue
 				}
+				value.Val = v
 				p.NumId = &value
 			default:
 				err = d.Skip() // skip unsupported tags
@@ -59,5 +67,23 @@ func (p *NumProperties) UnmarshalXML(d *xml.Decoder, _ xml.StartElement) error {
 			}
 		}
 	}
+
 	return nil
+}
+
+func (k *KeepNext) UnmarshalXML(d *xml.Decoder, start xml.StartElement) (err error) {
+	for _, attr := range start.Attr {
+		switch attr.Name.Local {
+		case "val":
+			k.Val, err = strconv.Atoi(attr.Value)
+			if err != nil {
+				return
+			}
+		default:
+			// ignore other attributes
+		}
+	}
+	// Consume the end element
+	_, err = d.Token()
+	return
 }

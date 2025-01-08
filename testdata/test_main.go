@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/yangge2333/go-docx"
+	"github.com/asseco-voice/go-docx"
 	"io"
 	"os"
 )
