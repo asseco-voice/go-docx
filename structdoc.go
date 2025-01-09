@@ -31,14 +31,14 @@ import (
 
 //nolint:revive,stylecheck
 const (
-	XMLNS_W   = `http://schemas.openxmlformats.org/wordprocessingml/2006/main`
-	XMLNS_R   = `http://schemas.openxmlformats.org/officeDocument/2006/relationships`
-	XMLNS_WP  = `http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing`
-	XMLNS_WPS = `http://schemas.microsoft.com/office/word/2010/wordprocessingShape`
-	XMLNS_WPC = `http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas`
-	XMLNS_WPG = `http://schemas.microsoft.com/office/word/2010/wordprocessingGroup`
-	XMLNS_MC  = `http://schemas.openxmlformats.org/markup-compatibility/2006`
-	// XMLNS_WP14 = `http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing`
+	XMLNS_W    = `http://schemas.openxmlformats.org/wordprocessingml/2006/main`
+	XMLNS_R    = `http://schemas.openxmlformats.org/officeDocument/2006/relationships`
+	XMLNS_WP   = `http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing`
+	XMLNS_WPS  = `http://schemas.microsoft.com/office/word/2010/wordprocessingShape`
+	XMLNS_WPC  = `http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas`
+	XMLNS_WPG  = `http://schemas.microsoft.com/office/word/2010/wordprocessingGroup`
+	XMLNS_MC   = `http://schemas.openxmlformats.org/markup-compatibility/2006`
+	XMLNS_WP14 = `http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing`
 
 	XMLNS_O = `urn:schemas-microsoft-com:office:office`
 	XMLNS_V = `urn:schemas-microsoft-com:vml`
@@ -156,20 +156,38 @@ func (b *Body) DropDrawingOf(name string) {
 
 // Document <w:document>
 type Document struct {
-	XMLName xml.Name `xml:"w:document"`
-	XMLW    string   `xml:"xmlns:w,attr"`             // cannot be unmarshalled in
-	XMLR    string   `xml:"xmlns:r,attr,omitempty"`   // cannot be unmarshalled in
-	XMLWP   string   `xml:"xmlns:wp,attr,omitempty"`  // cannot be unmarshalled in
-	XMLWPS  string   `xml:"xmlns:wps,attr,omitempty"` // cannot be unmarshalled in
-	XMLWPC  string   `xml:"xmlns:wpc,attr,omitempty"` // cannot be unmarshalled in
-	XMLWPG  string   `xml:"xmlns:wpg,attr,omitempty"` // cannot be unmarshalled in
-	// XMLMC   string   `xml:"xmlns:mc,attr,omitempty"`  // cannot be unmarshalled in
-	// XMLWP14 string   `xml:"xmlns:wp14,attr,omitempty"` // cannot be unmarshalled in
+	XMLName   xml.Name `xml:"w:document"`
+	XMLW      string   `xml:"xmlns:w,attr"`                // cannot be unmarshalled in
+	XMLR      string   `xml:"xmlns:r,attr,omitempty"`      // cannot be unmarshalled in
+	XMLWP     string   `xml:"xmlns:wp,attr,omitempty"`     // cannot be unmarshalled in
+	XMLWPS    string   `xml:"xmlns:wps,attr,omitempty"`    // cannot be unmarshalled in
+	XMLWPC    string   `xml:"xmlns:wpc,attr,omitempty"`    // cannot be unmarshalled in
+	XMLWPG    string   `xml:"xmlns:wpg,attr,omitempty"`    // cannot be unmarshalled in
+	XMLWPI    string   `xml:"xmlns:wpi,attr,omitempty"`    // cannot be unmarshalled in
+	XMLWNE    string   `xml:"xmlns:wne,attr,omitempty"`    // cannot be unmarshalled in
+	XMLCX     string   `xml:"xmlns:cx,attr,omitempty"`     // cannot be unmarshalled in
+	XMLCX1    string   `xml:"xmlns:cx1,attr,omitempty"`    // cannot be unmarshalled in
+	XMLCX2    string   `xml:"xmlns:cx2,attr,omitempty"`    // cannot be unmarshalled in
+	XMLCX3    string   `xml:"xmlns:cx3,attr,omitempty"`    // cannot be unmarshalled in
+	XMLCX4    string   `xml:"xmlns:cx4,attr,omitempty"`    // cannot be unmarshalled in
+	XMLCX5    string   `xml:"xmlns:cx5,attr,omitempty"`    // cannot be unmarshalled in
+	XMLCX6    string   `xml:"xmlns:cx6,attr,omitempty"`    // cannot be unmarshalled in
+	XMLCX7    string   `xml:"xmlns:cx7,attr,omitempty"`    // cannot be unmarshalled in
+	XMLCX8    string   `xml:"xmlns:cx8,attr,omitempty"`    // cannot be unmarshalled in
+	XMLAINK   string   `xml:"xmlns:aink,attr,omitempty"`   // cannot be unmarshalled in
+	XMLAM3D   string   `xml:"xmlns:am3d,attr,omitempty"`   // cannot be unmarshalled in
+	XMLM      string   `xml:"xmlns:m,attr,omitempty"`      // cannot be unmarshalled in
+	XMLMC     string   `xml:"xmlns:mc,attr,omitempty"`     // cannot be unmarshalled in
+	XMLWP14   string   `xml:"xmlns:wp14,attr,omitempty"`   // cannot be unmarshalled in
+	XMLW10    string   `xml:"xmlns:w10,attr,omitempty"`    // cannot be unmarshalled in
+	XMLW15    string   `xml:"xmlns:w15,attr,omitempty"`    // cannot be unmarshalled in
+	XMLW14    string   `xml:"xmlns:w14,attr,omitempty"`    // cannot be unmarshalled in
+	XMLW16CID string   `xml:"xmlns:w16cid,attr,omitempty"` // cannot be unmarshalled in
+	XMLW16SE  string   `xml:"xmlns:w16se,attr,omitempty"`  // cannot be unmarshalled in
+	XMLO      string   `xml:"xmlns:o,attr,omitempty"`      // cannot be unmarshalled in
+	XMLV      string   `xml:"xmlns:v,attr,omitempty"`      // cannot be unmarshalled in
 
-	// XMLO string `xml:"xmlns:o,attr,omitempty"` // cannot be unmarshalled in
-	// XMLV string `xml:"xmlns:v,attr,omitempty"` // cannot be unmarshalled in
-
-	// MCIgnorable string `xml:"mc:Ignorable,attr,omitempty"`
+	MCIgnorable string `xml:"mc:Ignorable,attr,omitempty"`
 
 	Body Body `xml:"w:body"`
 }

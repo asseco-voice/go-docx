@@ -115,17 +115,17 @@ func (f *Docx) parseDocument(file *zip.File) error {
 		return err
 	}
 	defer zf.Close()
-
+	// TODO: ADD MORE HERE
 	f.Document.XMLW = XMLNS_W
 	f.Document.XMLR = XMLNS_R
 	f.Document.XMLWP = XMLNS_WP
-	// f.Document.XMLMC = XMLNS_MC
-	// f.Document.XMLO = XMLNS_O
-	// f.Document.XMLV = XMLNS_V
+	f.Document.XMLMC = XMLNS_MC
+	f.Document.XMLO = XMLNS_O
+	f.Document.XMLV = XMLNS_V
 	f.Document.XMLWPS = XMLNS_WPS
 	f.Document.XMLWPC = XMLNS_WPC
 	f.Document.XMLWPG = XMLNS_WPG
-	// f.Document.XMLWP14 = XMLNS_WP14
+	f.Document.XMLWP14 = XMLNS_WP14
 	f.Document.XMLName.Space = XMLNS_W
 	f.Document.XMLName.Local = "document"
 
