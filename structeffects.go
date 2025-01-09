@@ -3,6 +3,7 @@
    Copyright (c) 2021 Gonzalo Fernandez-Victorio
    Copyright (c) 2021 Basement Crowd Ltd (https://www.basementcrowd.com)
    Copyright (c) 2023 Fumiama Minamoto (源文雨)
+   Copyright (c) 2025 asseco-voice
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published
@@ -292,6 +293,8 @@ type Spacing struct {
 
 	BeforeLines int    `xml:"w:beforeLines,attr,omitempty"`
 	Before      int    `xml:"w:before,attr,omitempty"`
+	AfterLines  int    `xml:"w:afterLines,attr,omitempty"`
+	After       int    `xml:"w:after,attr,omitempty"`
 	Line        int    `xml:"w:line,attr,omitempty"`
 	LineRule    string `xml:"w:lineRule,attr,omitempty"`
 }
@@ -312,6 +315,16 @@ func (s *Spacing) UnmarshalXML(d *xml.Decoder, start xml.StartElement) (err erro
 			}
 		case "before":
 			s.Before, err = strconv.Atoi(attr.Value)
+			if err != nil {
+				return
+			}
+		case "after":
+			s.After, err = strconv.Atoi(attr.Value)
+			if err != nil {
+				return
+			}
+		case "afterLines":
+			s.AfterLines, err = strconv.Atoi(attr.Value)
 			if err != nil {
 				return
 			}

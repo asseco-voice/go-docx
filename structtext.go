@@ -3,6 +3,7 @@
    Copyright (c) 2021 Gonzalo Fernandez-Victorio
    Copyright (c) 2021 Basement Crowd Ltd (https://www.basementcrowd.com)
    Copyright (c) 2023 Fumiama Minamoto (源文雨)
+   Copyright (c) 2025 asseco-voice
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published
@@ -172,7 +173,7 @@ func MergeSamePropRuns(r1, r2 *Run) bool {
 		}
 		xx2 := x2.Elem()
 		for j := 1; j < xx1.NumField(); j++ {
-			if !reflect.DeepEqual(xx1.Field(j), xx2.Field(j)) {
+			if !xx1.Field(j).Equal(xx2.Field(j)) {
 				return false
 			}
 		}
@@ -215,7 +216,7 @@ func MergeSamePropRunsOf(name ...string) RunMergeRule {
 			}
 			xx2 := x2.Elem()
 			for j := 1; j < xx1.NumField(); j++ {
-				if !reflect.DeepEqual(xx1.Field(j), xx2.Field(j)) {
+				if !xx1.Field(j).Equal(xx2.Field(j)) {
 					return false
 				}
 			}
@@ -241,6 +242,9 @@ func (p *Paragraph) MergeText(canmerge RunMergeRule) (np Paragraph) {
 				switch x := c.(type) {
 				case *Text:
 					if x.Text != "" {
+						if x.XMLSpace != "" && t.XMLSpace == "" {
+							t.XMLSpace = x.XMLSpace // Copy xml:space from the original Text else spaces are ignored
+						}
 						t.Text += x.Text
 					}
 				default:
@@ -263,6 +267,9 @@ func (p *Paragraph) MergeText(canmerge RunMergeRule) (np Paragraph) {
 					i := len(prevrun.Children) - 1
 					if t, ok := prevrun.Children[i].(*Text); ok {
 						prevtext = t
+						if t.XMLSpace != "" && prevtext.XMLSpace == "" {
+							prevtext.XMLSpace = t.XMLSpace
+						}
 						noappend = true
 					} else {
 						prevtext = &Text{}
@@ -272,6 +279,9 @@ func (p *Paragraph) MergeText(canmerge RunMergeRule) (np Paragraph) {
 					switch x := c.(type) {
 					case *Text:
 						if x.Text != "" {
+							if x.XMLSpace != "" && prevtext.XMLSpace == "" {
+								prevtext.XMLSpace = x.XMLSpace
+							}
 							prevtext.Text += x.Text
 						}
 					default:

@@ -3,6 +3,7 @@
    Copyright (c) 2021 Gonzalo Fernandez-Victorio
    Copyright (c) 2021 Basement Crowd Ltd (https://www.basementcrowd.com)
    Copyright (c) 2023 Fumiama Minamoto (源文雨)
+   Copyright (c) 2025 asseco-voice
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published
@@ -36,7 +37,7 @@ import (
 type Docx struct {
 	Document Document // Document is word/document.xml
 
-	//Numbering Numbering
+	Numbering Numbering
 
 	docRelation Relationships // docRelation is word/_rels/document.xml.rels
 
@@ -166,11 +167,4 @@ func (f *Docx) WriteTo(writer io.Writer) (_ int64, err error) {
 // Read is a fake function and cannot be used
 func (f *Docx) Read(_ []byte) (int, error) {
 	return 0, os.ErrInvalid
-}
-
-// UseTemplate will replace template files
-func (f *Docx) UseTemplate(template string, tmpfslst []string, tmplfs fs.FS) {
-	f.template = template
-	f.tmplfs = tmplfs
-	f.tmpfslst = tmpfslst
 }

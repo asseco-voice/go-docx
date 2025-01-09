@@ -3,6 +3,7 @@
    Copyright (c) 2021 Gonzalo Fernandez-Victorio
    Copyright (c) 2021 Basement Crowd Ltd (https://www.basementcrowd.com)
    Copyright (c) 2023 Fumiama Minamoto (源文雨)
+   Copyright (c) 2025 asseco-voice
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU Affero General Public License as published
@@ -40,6 +41,7 @@ type Run struct {
 
 	InstrText string `xml:"w:instrText,omitempty"`
 
+	FldChar  *FldChar `xml:"w:fldChar,omitempty"`
 	Children []interface{}
 
 	file *Docx
@@ -91,6 +93,18 @@ func (r *Run) parse(d *xml.Decoder, tt xml.StartElement) (child interface{}, err
 			return nil, err
 		}
 		r.RunProperties = &value
+		return nil, nil
+	case "fldChar":
+		var value FldChar
+		err = d.DecodeElement(&value, &tt)
+		v := getAtt(tt.Attr, "fldCharType")
+		if v != "" {
+			value.FldCharType = v
+		}
+		if err != nil && !strings.HasPrefix(err.Error(), "expected") {
+			println("error parsing fldChar" + err.Error())
+		}
+		r.FldChar = &value
 		return nil, nil
 	case "instrText":
 		var value string
@@ -322,11 +336,13 @@ func (r *RunProperties) UnmarshalXML(d *xml.Decoder, _ xml.StartElement) error {
 
 // RunFonts specifies the fonts used in the text of a run.
 type RunFonts struct {
-	XMLName  xml.Name `xml:"w:rFonts,omitempty"`
-	ASCII    string   `xml:"w:ascii,attr,omitempty"`
-	EastAsia string   `xml:"w:eastAsia,attr,omitempty"`
-	HAnsi    string   `xml:"w:hAnsi,attr,omitempty"`
-	Hint     string   `xml:"w:hint,attr,omitempty"`
+	XMLName    xml.Name `xml:"w:rFonts,omitempty"`
+	ASCII      string   `xml:"w:ascii,attr,omitempty"`
+	ASCIITheme string   `xml:"w:asciiTheme,attr,omitempty"`
+	EastAsia   string   `xml:"w:eastAsia,attr,omitempty"`
+	HAnsi      string   `xml:"w:hAnsi,attr,omitempty"`
+	HAnsiTheme string   `xml:"w:hAnsiTheme,attr,omitempty"`
+	Hint       string   `xml:"w:hint,attr,omitempty"`
 }
 
 // UnmarshalXML ...
@@ -335,8 +351,12 @@ func (f *RunFonts) UnmarshalXML(d *xml.Decoder, start xml.StartElement) error {
 		switch attr.Name.Local {
 		case "ascii":
 			f.ASCII = attr.Value
+		case "asciiTheme":
+			f.ASCIITheme = attr.Value
 		case "eastAsia":
 			f.EastAsia = attr.Value
+		case "hAnsiTheme":
+			f.HAnsiTheme = attr.Value
 		case "hAnsi":
 			f.HAnsi = attr.Value
 		case "hint":
